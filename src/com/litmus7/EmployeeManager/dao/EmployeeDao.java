@@ -1,5 +1,6 @@
 package com.litmus7.EmployeeManager.dao;
 import com.litmus7.EmployeeManager.Dto.Employees;
+import com.litmus7.EmployeeManager.constant.Constant;
 import com.litmus7.EmployeeManager.util.DBUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,13 +10,14 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class EmployeeDao 
 {
 	public static boolean doesEmployeeExist(int id)
 	{
-		String query="select 1 from employees where emp_id = ?";
+		
 		try(Connection conn = DBUtil.getConnection();
-	             PreparedStatement stmt = conn.prepareStatement(query)) 
+	             PreparedStatement stmt = conn.prepareStatement(Constant.select1WithEmployeeId)) 
 		{
 			stmt.setInt(1, id);
 			ResultSet result =stmt.executeQuery();          
@@ -30,10 +32,10 @@ public class EmployeeDao
 	
 	public static void storeInDB(Employees employee) 
 	{
-		String sql = "INSERT INTO employees (emp_id, first_name, last_name, email, phone, department, salary, join_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		
 
 		try (Connection conn = DBUtil.getConnection();
-		     PreparedStatement stmt = conn.prepareStatement(sql)) 
+		     PreparedStatement stmt = conn.prepareStatement(Constant.insertToemployees)) 
 		{
 
 		    stmt.setInt(1, employee.getEmployeeId());
@@ -60,9 +62,9 @@ public class EmployeeDao
 	public static List<Employees> selectAllEmployees() 
 	{
 		List<Employees> employeeList =new ArrayList<>();
-		String sql="select * From Employees";
+		
 		try (Connection conn = DBUtil.getConnection();
-			     PreparedStatement stmt = conn.prepareStatement(sql);
+			     PreparedStatement stmt = conn.prepareStatement(Constant.selectAllFromEmployee);
 				ResultSet result=stmt.executeQuery();) 
 		{
 			while(result.next()) 

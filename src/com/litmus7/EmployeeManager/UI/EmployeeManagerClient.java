@@ -5,20 +5,21 @@ import java.util.List;
 import com.litmus7.EmployeeManager.Controller.EmployeeManagerController;
 import com.litmus7.EmployeeManager.Dto.Employees;
 import com.litmus7.EmployeeManager.Dto.Response;
+import com.litmus7.EmployeeManager.constant.Constant;
 
 public class EmployeeManagerClient {
 
 	public static void main(String[] args) {
 		EmployeeManagerController controller = new EmployeeManagerController();
 		
-//		Response<Integer> result = controller.writeDataToDb("src/com/litmus7/EmployeeManager/Dto/employees.csv");
-//		if (result.getStatusCode()==200) 
-//		{
-//			System.out.println(result.getErrorMessage()+"  "+result.getData());
-//		}
-//		else {
-//			System.out.println(result.getStatusCode()+result.getErrorMessage());
-//		}
+		Response<Integer> result = controller.writeDataToDb("src/com/litmus7/EmployeeManager/Dto/employees.csv");
+		if (result.getStatusCode()==200) 
+		{
+			System.out.println(result.getStatusCode()+"  "+Constant.errorCodeMap.get(result.getStatusCode())+"  "+result.getData());
+		}
+		else {
+			System.out.println(result.getStatusCode()+"  "+Constant.errorCodeMap.get(result.getStatusCode()));
+		}
 		
 		Response<List<Employees>> employeeListResponse=controller.getAllEmployees();
 		if (employeeListResponse.getStatusCode()==200) 
@@ -29,7 +30,7 @@ public class EmployeeManagerClient {
 		    }
 		}
 		else {
-			System.out.println(employeeListResponse.getStatusCode()+employeeListResponse.getErrorMessage()+employeeListResponse);
+			System.out.println(employeeListResponse.getStatusCode()+"  "+Constant.errorCodeMap.get(employeeListResponse.getStatusCode())+"  "+employeeListResponse);
 		}
 		
 	}

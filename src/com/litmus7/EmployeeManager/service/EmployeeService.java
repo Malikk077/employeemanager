@@ -8,7 +8,7 @@ import com.litmus7.EmployeeManager.Dto.Employees;
 import com.litmus7.EmployeeManager.dao.EmployeeDao;
 
 public class EmployeeService {
-	public  void writeToDb(String[] values) 
+	public  boolean writeToDb(String[] values) 
 	{
 		
 		Employees employee =new Employees();
@@ -29,14 +29,15 @@ public class EmployeeService {
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			return;
+			return false;
 			
 		}
-		if (!ValidationUtil.validateEmployee(employee)) return;
+		if (!ValidationUtil.validateEmployee(employee)) return false;
 		
-		if (EmployeeDao.doesEmployeeExist(employee.getEmployeeId())) return ;
+		if (EmployeeDao.doesEmployeeExist(employee.getEmployeeId())) return false;
 		
-		EmployeeDao.storeInDB(employee) ;
+		boolean emp =EmployeeDao.storeInDB(employee) ;
+		return emp;
 	 }
 
 	public List<Employees> readAllFromDb() 

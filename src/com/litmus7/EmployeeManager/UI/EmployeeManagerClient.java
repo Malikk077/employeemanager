@@ -15,23 +15,23 @@ public class EmployeeManagerClient {
 		Response<Integer> result = controller.writeDataToDb("src/com/litmus7/EmployeeManager/Dto/employees.csv");
 		if (result.getStatusCode()==200) 
 		{
-			System.out.println(result.getStatusCode()+"  "+Constant.errorCodeMap.get(result.getStatusCode())+"  "+result.getData());
+			System.out.println(result.getStatusCode()+"  "+Constant.errorCodeMap.get(result.getStatusCode())+"  No of rows inserted:"+result.getData());
 		}
 		else {
-			System.out.println(result.getStatusCode()+"  "+Constant.errorCodeMap.get(result.getStatusCode()));
+			System.out.println(result.getStatusCode()+"  "+Constant.errorCodeMap.get(result.getStatusCode())+"  No of rows inserted:"+result.getData());
 		}
 		
-		Response<List<Employees>> employeeListResponse=controller.getAllEmployees();
-		if (employeeListResponse.getStatusCode()==200) 
-		{
-			for (Employees emp:employeeListResponse.getData())
-			{
-				System.out.println(emp.toDetailedString());
-		    }
-		}
-		else {
-			System.out.println(employeeListResponse.getStatusCode()+"  "+Constant.errorCodeMap.get(employeeListResponse.getStatusCode())+"  "+employeeListResponse);
-		}
+//		Response<List<Employees>> employeeListResponse=controller.getAllEmployees();
+//		if (employeeListResponse.getStatusCode()==200) 
+//		{
+//			for (Employees emp:employeeListResponse.getData())
+//			{
+//				System.out.println(emp.toDetailedString());
+//		    }
+//		}
+//		else {
+//			System.out.println(employeeListResponse.getStatusCode()+"  "+Constant.errorCodeMap.get(employeeListResponse.getStatusCode())+"  "+employeeListResponse);
+//		}
 		
 	}
 

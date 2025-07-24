@@ -16,16 +16,34 @@ public class EmployeeManagerController {
 	{
 	    Response<Integer> obj = new Response(0,"",0);
 	    try {
+	    	if (file == null || file.trim().isEmpty()) {
+		        return new Response<>(502, "File path is missing.", null);
+		    }
+
+		    if (!file.toLowerCase().endsWith(".csv")) {
+		        return new Response<>(501, "Provided file is not a CSV.", null);
+		    }
 	        List<String[]> records = CsvUtil.readCSV(file);
+	        boolean isWritten=false;
 	        for (String[] values : records) 
 	        {
-	            employserv.writeToDb(values);
-	            obj.setData(obj.getData()+1);
+	            isWritten= employserv.writeToDb(values);
+	            if (isWritten)
+	                 obj.setData(obj.getData()+1);
 	        }
 
-	        
-	        obj.setErrorMessage("Data written successfully");
-	        obj.setStatusCode(200);
+	        if(isWritten) 
+	        {
+	        	obj.setErrorMessage("Data written successfully");
+		        obj.setStatusCode(200);
+	        }
+	        else
+	        {
+	        	obj.setErrorMessage("Unexpected error: " );
+		        obj.setStatusCode(500);
+	        }
+	        	
+	            
 	    } catch (Exception e) {
 	        obj.setErrorMessage("Unexpected error: " + e.getMessage());
 	        obj.setStatusCode(500);

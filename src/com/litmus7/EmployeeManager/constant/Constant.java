@@ -12,6 +12,9 @@ public class Constant {
         errorCodeMap.put(400, "Bad Request");
         errorCodeMap.put(404, "Not Found");
         errorCodeMap.put(500, "Internal Server Error");
+        errorCodeMap.put(501, "Provided file is not a CSV");
+        errorCodeMap.put(502, "File path is missing");
+        errorCodeMap.put(505, "error writting file");
     }
 	
 	

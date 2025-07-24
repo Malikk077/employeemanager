@@ -30,7 +30,7 @@ public class EmployeeDao
 		return false;
 	}
 	
-	public static void storeInDB(Employees employee) 
+	public static boolean storeInDB(Employees employee) 
 	{
 		
 
@@ -49,13 +49,16 @@ public class EmployeeDao
 		    // Convert java.util.Date to java.sql.Date
 		    java.sql.Date sqlDate = new java.sql.Date(employee.getJoinDate().getTime());
 		    stmt.setDate(8, sqlDate);
-		    stmt.executeUpdate();
-			stmt.close();
+		    int rowsInserted = stmt.executeUpdate();
+	        return rowsInserted > 0;
+			
+			
 			
 		} 
 		catch (SQLException e) 
 		{
 			 System.out.println("SQL error on duplicate check"+ e.getMessage());
+			 return false;
 		}
 	}
 

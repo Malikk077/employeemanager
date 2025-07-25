@@ -15,6 +15,9 @@ public class Constant {
         errorCodeMap.put(501, "Provided file is not a CSV");
         errorCodeMap.put(502, "File path is missing");
         errorCodeMap.put(505, "error writting file");
+        errorCodeMap.put(206, "Partial success: some records failed to insert.");
+        errorCodeMap.put(506, "Data write failed completely.");
+        
     }
 	
 	

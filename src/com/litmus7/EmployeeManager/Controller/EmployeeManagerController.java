@@ -24,26 +24,27 @@ public class EmployeeManagerController {
 		        return new Response<>(501, "Provided file is not a CSV.", null);
 		    }
 	        List<String[]> records = CsvUtil.readCSV(file);
-	        boolean isWritten=false;
+	        boolean isAnyFalse=false;
+	        int rowsWritten=0;
 	        for (String[] values : records) 
 	        {
-	            isWritten= employserv.writeToDb(values);
-	            if (isWritten)
-	                 obj.setData(obj.getData()+1);
+	            boolean isWritten= employserv.writeToDb(values);
+	            if (!isWritten)
+	            	 isAnyFalse=true;
+	            	  
+	            else
+	            	rowsWritten++;
 	        }
-
-	        if(isWritten) 
+	        obj.setData(rowsWritten);
+	        if(!isAnyFalse && rowsWritten>0) 
 	        {
 	        	obj.setErrorMessage("Data written successfully");
 		        obj.setStatusCode(200);
 	        }
-	        else
-	        {
-	        	obj.setErrorMessage("Unexpected error: " );
-		        obj.setStatusCode(500);
-	        }
-	        	
-	            
+	        else if(rowsWritten>0)
+		        obj.setStatusCode(206);
+	        else 
+	        	obj.setStatusCode(506);
 	    } catch (Exception e) {
 	        obj.setErrorMessage("Unexpected error: " + e.getMessage());
 	        obj.setStatusCode(500);

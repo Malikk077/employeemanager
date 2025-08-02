@@ -14,11 +14,11 @@ public class EmployeeManagerController {
 	{
 	    try {
 	    	if (file == null || file.trim().isEmpty()) {
-		        return new Response<>(502, "File path is missing.", null);
+		        return new Response<>(502, "File path is missing.");
 		    }
 
 		    if (!file.toLowerCase().endsWith(".csv")) {
-		        return new Response<>(501, "Provided file is not a CSV.", null);
+		        return new Response<>(501, "Provided file is not a CSV.");
 		    }
 		    
 	        Map<String, Integer> output = employeeService.writeToDb(file);
@@ -29,7 +29,7 @@ public class EmployeeManagerController {
 
 	        
 	        if (successCount == 0) {
-		        return new Response<>(500, "No records were inserted.", null);
+		        return new Response<>(500, "No records were inserted.");
 		    } else if (successCount < totalCount) {
 		        return new Response<>(207, "Partial insert: " + successCount + " of " + totalCount + " inserted.", successCount);
 		    } else
@@ -38,16 +38,16 @@ public class EmployeeManagerController {
 
 	    catch (Exception e) {
 	        e.printStackTrace();
-	        return new Response<>(500, "An error occurred while writing data to DB.", null);
+	        return new Response<>(500, "An error occurred while writing data to DB.");
 	        }
 	}
 	public Response<List<Employees>> getAllEmployees()
 	{
-		List<Employees> employeeList=new ArrayList<>();
-		employeeList=employeeService.readAllFromDb();
-		if (employeeList == null || employeeList.isEmpty()) {
-	        return new Response<>(500, "Failed to fetch data", null);
+		List<Employees> employees=new ArrayList<>();
+		employees=employeeService.readAllFromDb();
+		if (employees == null || employees.isEmpty()) {
+	        return new Response<>(500, "Failed to fetch data");
 	    }
-		return new Response<>(200,"data Fetched Succesfully",employeeList);
+		return new Response<>(200,"data Fetched Succesfully",employees);
 	}
 }

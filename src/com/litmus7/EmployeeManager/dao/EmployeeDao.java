@@ -13,7 +13,7 @@ import java.util.List;
 
 public class EmployeeDao 
 {
-	public static boolean doesEmployeeExist(int id)
+	public boolean doesEmployeeExist(int id)
 	{
 		
 		try(Connection conn = DBUtil.getConnection();
@@ -31,7 +31,7 @@ public class EmployeeDao
 		return false;
 	}
 	
-	public static boolean storeInDB(Employees employee) 
+	public boolean saveEmployee(Employees employee) 
 	{
 		
 
@@ -51,10 +51,7 @@ public class EmployeeDao
 		    java.sql.Date sqlDate = new java.sql.Date(employee.getJoinDate().getTime());
 		    stmt.setDate(8, sqlDate);
 		    int rowsInserted = stmt.executeUpdate();
-	        return rowsInserted > 0;
-			
-			
-			
+	        return rowsInserted > 0;		
 		} 
 		catch (SQLException e) 
 		{
@@ -63,9 +60,9 @@ public class EmployeeDao
 		}
 	}
 
-	public static List<Employees> selectAllEmployees() 
+	public List<Employees> selectAllEmployees() 
 	{
-		List<Employees> employeeList =new ArrayList<>();
+		List<Employees> employees =new ArrayList<>();
 		
 		try (Connection conn = DBUtil.getConnection();
 			     PreparedStatement stmt = conn.prepareStatement(SQLConstants.SELECT_ALL_EMPLOYEES);
@@ -74,15 +71,15 @@ public class EmployeeDao
 			while(result.next()) 
 			{
 				Employees emp =new Employees();
-				emp.setEmployeeId(result.getInt("emp_id"));
-				emp.setFirstName(result.getString("first_name"));
-				emp.setLastName(result.getString("last_name"));
-				emp.setEmail(result.getString("email"));
-				emp.setPhone(result.getString("phone"));
-				emp.setDepartment(result.getString("department"));
-				emp.setSalary(result.getDouble("salary"));
-				emp.setJoinDate(result.getDate("join_date"));
-				employeeList.add(emp);
+				emp.setEmployeeId(result.getInt(SQLConstants.EMP_ID));
+				emp.setFirstName(result.getString(SQLConstants.FIRST_NAME));
+				emp.setLastName(result.getString(SQLConstants.LAST_NAME));
+				emp.setEmail(result.getString(SQLConstants.EMAIL));
+				emp.setPhone(result.getString(SQLConstants.PHONE));
+				emp.setDepartment(result.getString(SQLConstants.DEPARTMENT));
+//				emp.setSalary(result.getDouble(SQLConstants.SALARY));
+//				emp.setJoinDate(result.getDate(SQLConstants.JOIN_DATE));
+				employees.add(emp);
 			}
 				
 		 }
@@ -90,6 +87,6 @@ public class EmployeeDao
 		{
 		    e.printStackTrace();
 		}
-		return employeeList;
+		return employees;
 	}
 }

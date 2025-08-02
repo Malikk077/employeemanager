@@ -10,7 +10,9 @@ import com.litmus7.EmployeeManager.Dto.Employees;
 import com.litmus7.EmployeeManager.dao.EmployeeDao;
 
 public class EmployeeService {
-	public Map<String, Integer> writeToDb(String file) 
+	
+    EmployeeDao employeeDao = new EmployeeDao();
+	public Map<String, Integer> writeToDb (String file) 
 	{
 		Map<String, Integer> count=new HashMap<>();    
 		count.put("total", 0);
@@ -49,12 +51,12 @@ public class EmployeeService {
     			continue;
     		}
     			
-    		if (EmployeeDao.doesEmployeeExist(employee.getEmployeeId())){
+    		if (employeeDao.doesEmployeeExist(employee.getEmployeeId())){
     			count.put("failure", count.get("failure") + 1);
     			continue;
     		}
     			
-    		if(EmployeeDao.storeInDB(employee)) {
+    		if(employeeDao.saveEmployee(employee)) {
     			count.put("success", count.get("success") + 1);
     		}
     	}
@@ -66,7 +68,7 @@ public class EmployeeService {
 
 	public List<Employees> readAllFromDb() 
 	{
-		return EmployeeDao.selectAllEmployees();
+		return employeeDao.selectAllEmployees();
 	}
 
 }

@@ -11,7 +11,7 @@ public class EmployeeManagerClient {
 	public static void main(String[] args) {
 		EmployeeManagerController controller = new EmployeeManagerController();
 		
-		Response<Integer> response = controller.writeDataToDb("src/com/litmus7/EmployeeManager/Dto/employees.csv");
+		Response<Integer> response = controller.writeDataToDb("employees.csv");
 		if (response.getStatusCode() == 200) {
             System.out.println("All records were inserted succesfully.");
             System.out.println("Rows inserted: "+ response.getData());
@@ -22,16 +22,16 @@ public class EmployeeManagerClient {
             System.out.println("Message: " + response.getErrorMessage());
         }
 		
-		Response<List<Employees>> employeeListResponse=controller.getAllEmployees();
-		if (employeeListResponse.getStatusCode()==200) 
+		Response<List<Employees>> employeesResponse=controller.getAllEmployees();
+		if (employeesResponse.getStatusCode()==200) 
 		{
-			for (Employees emp:employeeListResponse.getData())
+			for (Employees emp:employeesResponse.getData())
 			{
 				System.out.println(emp.toDetailedString());
 		    }
 		}
 		else {
-			System.out.println("Message: " + employeeListResponse.getErrorMessage());
+			System.out.println("Message: " + employeesResponse.getErrorMessage());
 		}
 		
 	}

@@ -9,9 +9,13 @@ public class Response <T> {
 	{
 		super();
 	}
+	public Response(int statusCode, String errorMessage){
+	    this.statusCode = statusCode;
+	    this.errorMessage = errorMessage;
+	    this.data = null;
+    }
 	
-    public Response(int statusCode, String errorMessage, T data) 
-    {
+    public Response(int statusCode, String errorMessage, T data) {
         this.statusCode = statusCode;
         this.errorMessage = errorMessage;
         this.data = data;

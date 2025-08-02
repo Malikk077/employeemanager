@@ -14,7 +14,7 @@ public class DbConfig {
     public static DbConfig getDatabaseConfig() {
         String URL = "jdbc:mysql://localhost:3306/empl";
         String USER = "root";
-        String PASS = "#Ssfam123";
+        String PASS = "#Student1234";
         
         return new DbConfig(URL, USER, PASS);
     }

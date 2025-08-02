@@ -1,7 +1,5 @@
 package com.litmus7.EmployeeManager.constant;
 
-import java.util.HashMap;
-
 public class Constant {
 	public static final int SUCCESS = 200;
 	public static final int FAILURE = 500;
@@ -15,7 +13,3 @@ public class Constant {
 	
 	
 	
-	
-	
-
-}

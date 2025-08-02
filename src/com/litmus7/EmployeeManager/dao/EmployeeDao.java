@@ -1,6 +1,6 @@
 package com.litmus7.EmployeeManager.dao;
 import com.litmus7.EmployeeManager.Dto.Employees;
-import com.litmus7.EmployeeManager.constant.Constant;
+import com.litmus7.EmployeeManager.constant.SQLConstants;
 import com.litmus7.EmployeeManager.util.DBUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;

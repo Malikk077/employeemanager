@@ -17,7 +17,7 @@ public class EmployeeDao
 	{
 		
 		try(Connection conn = DBUtil.getConnection();
-	             PreparedStatement stmt = conn.prepareStatement(Constant.select1WithEmployeeId);) 
+	             PreparedStatement stmt = conn.prepareStatement(SQLConstants.SELECT_1_FROM_EMPLOYEES);) 
 		{
 			stmt.setInt(1, id);
 			try (ResultSet result = stmt.executeQuery()) {
@@ -36,7 +36,7 @@ public class EmployeeDao
 		
 
 		try (Connection conn = DBUtil.getConnection();
-		     PreparedStatement stmt = conn.prepareStatement(Constant.insertToemployees)) 
+		     PreparedStatement stmt = conn.prepareStatement(SQLConstants.INSERT_TO_EMPLOYEES)) 
 		{
 
 		    stmt.setInt(1, employee.getEmployeeId());
@@ -68,7 +68,7 @@ public class EmployeeDao
 		List<Employees> employeeList =new ArrayList<>();
 		
 		try (Connection conn = DBUtil.getConnection();
-			     PreparedStatement stmt = conn.prepareStatement(Constant.selectAllFromEmployee);
+			     PreparedStatement stmt = conn.prepareStatement(SQLConstants.SELECT_ALL_EMPLOYEES);
 				ResultSet result=stmt.executeQuery();) 
 		{
 			while(result.next()) 

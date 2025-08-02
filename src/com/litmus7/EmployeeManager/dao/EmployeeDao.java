@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 public class EmployeeDao 
@@ -17,11 +17,12 @@ public class EmployeeDao
 	{
 		
 		try(Connection conn = DBUtil.getConnection();
-	             PreparedStatement stmt = conn.prepareStatement(Constant.select1WithEmployeeId)) 
+	             PreparedStatement stmt = conn.prepareStatement(Constant.select1WithEmployeeId);) 
 		{
 			stmt.setInt(1, id);
-			ResultSet result =stmt.executeQuery();          
-	        return  (result.next());	
+			try (ResultSet result = stmt.executeQuery()) {
+	            return result.next(); 
+	        }
 		}
 		 catch (SQLException e) 
 		{
@@ -92,4 +93,3 @@ public class EmployeeDao
 		return employeeList;
 	}
 }
-

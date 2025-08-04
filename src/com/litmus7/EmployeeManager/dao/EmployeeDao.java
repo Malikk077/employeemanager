@@ -32,7 +32,7 @@ public class EmployeeDao
 		return false;
 	}
 	
-	public boolean saveEmployee(Employees employee) 
+	public boolean saveEmployee(Employees employee) throws NullPointerException , IllegalArgumentException
 	{
 		
 
@@ -54,14 +54,14 @@ public class EmployeeDao
 		    int rowsInserted = stmt.executeUpdate();
 	        return rowsInserted > 0;		
 		} 
-		catch (SQLException | NullPointerException | IllegalArgumentException e) {
+		catch (SQLException  e) {
 		    System.out.println("Error while saving employee data: " + e.getMessage());
 		    e.printStackTrace();
 		    return false;
 		}
 	}
 
-	public List<Employees> selectAllEmployees() 
+	public List<Employees> selectAllEmployees() throws NullPointerException , IllegalArgumentException
 	{
 		List<Employees> employees =new ArrayList<>();
 		
@@ -84,7 +84,7 @@ public class EmployeeDao
 			}
 				
 		 }
-		catch (SQLException | NullPointerException | IllegalArgumentException e) {
+		catch (SQLException  e) {
 		    System.out.println("Error while fetching employee data: " + e.getMessage());
 		    e.printStackTrace();
 		}

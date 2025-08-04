@@ -62,11 +62,20 @@ public class EmployeeService {
     			count.put("failure", count.get("failure") + 1);
     			continue;
     		}
-    			
-    		if(employeeDao.saveEmployee(employee)) {
-    			count.put("success", count.get("success") + 1);
-    		}
+    	    try {
+    	    	if(employeeDao.saveEmployee(employee)) {
+        			count.put("success", count.get("success") + 1);
+    	    	}
+    	    }   	    	
+    	    catch(NullPointerException  | IllegalArgumentException e) {
+    	    	System.out.println("Error while saving employee data: " + e.getMessage());
+    		    e.printStackTrace();
+    		    count.put("failure", count.get("failure") + 1);
+    		    continue;    		    
+    	    }
+    		
     	}
+    	
 		return count;
 	}
     			
@@ -75,7 +84,16 @@ public class EmployeeService {
 
 	public List<Employees> readAllFromDb() 
 	{
-		return employeeDao.selectAllEmployees();
+		
+		try{
+			return employeeDao.selectAllEmployees();
+		}
+		catch(NullPointerException | IllegalArgumentException e)
+		{
+			System.out.println("Error while fetching employee data: " + e.getMessage());
+		    e.printStackTrace();
+		    return null;
+		}
 	}
 
 }

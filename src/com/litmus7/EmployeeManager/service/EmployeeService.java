@@ -1,4 +1,5 @@
 package com.litmus7.EmployeeManager.service;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -40,11 +41,17 @@ public class EmployeeService {
     		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     		    employee.setJoinDate(sdf.parse(values[7].trim()));		
     		 }
-    		catch(Exception e)
+    		catch(NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e )
     		{
     			e.printStackTrace();
     			count.put("failure", count.get("failure") + 1);
     			continue;
+    		}
+    		catch(Exception e)
+    		{
+    		e.printStackTrace();
+			count.put("failure", count.get("failure") + 1);
+			continue;
     		}
     		if (!ValidationUtil.validateEmployee(employee)){
     			count.put("failure", count.get("failure") + 1);

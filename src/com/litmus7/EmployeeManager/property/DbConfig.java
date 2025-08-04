@@ -28,6 +28,11 @@ public class DbConfig {
             String url = prop.getProperty("db.url");
             String username = prop.getProperty("db.username");
             String password = prop.getProperty("db.password");
+            
+            if (url == null || username == null || password == null) {
+                System.out.println("Missing required DB configuration.");
+                return null;
+            }
 
             return new DbConfig(url, username, password);
 

@@ -10,7 +10,7 @@ public class EmployeeManagerController {
 	EmployeeService employeeService =new EmployeeService();
 	
 
-	public Response<Integer> writeDataToDb(String file) 
+	public Response<Integer> writeDataToDb(String file)
 	{
 	    try {
 	    	if (file == null || file.trim().isEmpty()) {
@@ -34,12 +34,13 @@ public class EmployeeManagerController {
 		        return new Response<>(207, "Partial insert: " + successCount + " of " + totalCount + " inserted.", successCount);
 		    } else
 		        return new Response<>(200, null, successCount); 
-		    }
-
-	    catch (Exception e) {
-	        e.printStackTrace();
-	        return new Response<>(500, "An error occurred while writing data to DB.");
-	        }
+	    }
+	
+	     catch (Exception e) {
+	        e.printStackTrace(); // log full stack trace
+	        return new Response<>(500, "Unexpected error occurred.");
+	    }
+	    
 	}
 	public Response<List<Employees>> getAllEmployees()
 	{

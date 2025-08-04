@@ -66,9 +66,10 @@ public class Employees {
 	               ", lastName='" + this.getLastName() + '\'' +
 	               ", email='" + this.getEmail() + '\'' +
 	               ", phone='" + this.getPhone() + '\'' +
-	               ", department='" + this.getDepartment() + '\'' +
-	               ", salary=" + this.getSalary() +
-	               ", joinDate=" + this.getJoinDate() ;
+	               ", department='" + this.getDepartment() + '\'' 	               
+//	               +", salary=" + this.getSalary() +
+//	               ", joinDate=" + this.getJoinDate()
+	               ;
 	    }
 	
 	

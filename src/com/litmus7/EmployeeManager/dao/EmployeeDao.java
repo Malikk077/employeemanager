@@ -26,6 +26,7 @@ public class EmployeeDao
 		}
 		 catch (SQLException e) 
 		{
+			 e.printStackTrace();
 			 System.out.println("SQL error on duplicate check"+ e.getMessage());
 		}
 		return false;
@@ -53,10 +54,10 @@ public class EmployeeDao
 		    int rowsInserted = stmt.executeUpdate();
 	        return rowsInserted > 0;		
 		} 
-		catch (SQLException e) 
-		{
-			 System.out.println("SQL error on duplicate check"+ e.getMessage());
-			 return false;
+		catch (SQLException | NullPointerException | IllegalArgumentException e) {
+		    System.out.println("Error while saving employee data: " + e.getMessage());
+		    e.printStackTrace();
+		    return false;
 		}
 	}
 
@@ -83,8 +84,8 @@ public class EmployeeDao
 			}
 				
 		 }
-		catch (SQLException e) 
-		{
+		catch (SQLException | NullPointerException | IllegalArgumentException e) {
+		    System.out.println("Error while fetching employee data: " + e.getMessage());
 		    e.printStackTrace();
 		}
 		return employees;

@@ -5,6 +5,7 @@ import java.util.Map;
 import com.litmus7.EmployeeManager.Dto.Employees;
 import com.litmus7.EmployeeManager.Dto.Response;
 import com.litmus7.EmployeeManager.service.EmployeeService;
+import com.litums7.EmployeeManager.exception.EmployeeServiceException;
 
 public class EmployeeManagerController {
 	EmployeeService employeeService =new EmployeeService();
@@ -46,7 +47,12 @@ public class EmployeeManagerController {
 	public Response<List<Employees>> getAllEmployees()
 	{
 		List<Employees> employees=new ArrayList<>();
-		employees=employeeService.readAllFromDb();
+		try{
+			employees=employeeService.readAllFromDb();	
+		}
+		catch (EmployeeServiceException e) {
+	        return new Response<>(500, "Exception while fetching data: " + e.getMessage());
+	    }
 		if (employees == null || employees.isEmpty()) {
 	        return new Response<>(500, "Failed to fetch data");
 	    }

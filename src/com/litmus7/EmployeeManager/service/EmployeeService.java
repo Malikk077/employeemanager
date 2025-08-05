@@ -7,13 +7,15 @@ import java.util.Map;
 
 import com.litmus7.EmployeeManager.util.CsvUtil;
 import com.litmus7.EmployeeManager.util.ValidationUtil;
+import com.litums7.EmployeeManager.exception.EmployeeDataAccessException;
+import com.litums7.EmployeeManager.exception.EmployeeServiceException;
 import com.litmus7.EmployeeManager.Dto.Employees;
 import com.litmus7.EmployeeManager.dao.EmployeeDao;
 
 public class EmployeeService {
 	
     EmployeeDao employeeDao = new EmployeeDao();
-	public Map<String, Integer> writeToDb (String file) 
+	public Map<String, Integer> writeToDb (String file)  
 	{
 		Map<String, Integer> count=new HashMap<>();    
 		count.put("total", 0);
@@ -41,59 +43,65 @@ public class EmployeeService {
     		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     		    employee.setJoinDate(sdf.parse(values[7].trim()));		
     		 }
-    		catch(NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e )
+    		catch(NumberFormatException e)
     		{
-    			e.printStackTrace();
-    			count.put("failure", count.get("failure") + 1);
-    			continue;
+    			System.err.println("Number format error in row " + count.get("total") + ": " + e.getMessage());
+                count.put("failure", count.get("failure") + 1);
+                continue;
     		}
-    		catch(Exception e)
+    		catch(ParseException e)
     		{
-    		e.printStackTrace();
-			count.put("failure", count.get("failure") + 1);
-			continue;
-    		}
+    			 System.err.println("Date parse error in row " + count.get("total") + ": " + e.getMessage());
+    	            count.put("failure", count.get("failure") + 1);
+    	            continue;
+    	        }
+    		catch(ArrayIndexOutOfBoundsException e)
+    		{
+                System.err.println("Missing field in row " + count.get("total") + ": " + e.getMessage());
+                count.put("failure", count.get("failure") + 1);
+                continue;
+            }
     		if (!ValidationUtil.validateEmployee(employee)){
     			count.put("failure", count.get("failure") + 1);
-    			continue;
+    			continue;		
     		}
-    			
-    		if (employeeDao.doesEmployeeExist(employee.getEmployeeId())){
-    			count.put("failure", count.get("failure") + 1);
-    			continue;
+    		try {
+    			if (employeeDao.doesEmployeeExist(employee.getEmployeeId())){
+        			count.put("failure", count.get("failure") + 1);
+        			continue;
+    			}	 
+    			if (employeeDao.saveEmployee(employee)) {
+                    count.put("success", count.get("success") + 1);
+                } else {
+                    count.put("failure", count.get("failure") + 1);
+                }	
     		}
-    	    try {
-    	    	if(employeeDao.saveEmployee(employee)) {
-        			count.put("success", count.get("success") + 1);
-    	    	}
-    	    }   	    	
-    	    catch(NullPointerException  | IllegalArgumentException e) {
-    	    	System.out.println("Error while saving employee data: " + e.getMessage());
-    		    e.printStackTrace();
-    		    count.put("failure", count.get("failure") + 1);
-    		    continue;    		    
-    	    }
-    		
-    	}
-    	
+    	    catch(EmployeeDataAccessException e) {
+    	    	System.err.println("Database error while processing row " + count.get("total") + ": " + e.getMessage());
+                count.put("failure", count.get("failure") + 1);
+                // Do not throw here — continue to next record
+            }    	
+        }	
 		return count;
 	}
     			
     		
     		
 
-	public List<Employees> readAllFromDb() 
+	public List<Employees> readAllFromDb() throws EmployeeServiceException
 	{
 		
 		try{
 			return employeeDao.selectAllEmployees();
 		}
-		catch(NullPointerException | IllegalArgumentException e)
-		{
-			System.out.println("Error while fetching employee data: " + e.getMessage());
-		    e.printStackTrace();
-		    return null;
+		catch(EmployeeDataAccessException e) {
+			System.err.println("Error: " + e.getMessage());
+			throw new EmployeeServiceException(e);
+		    
+		   
 		}
+		
+
 	}
 
 }

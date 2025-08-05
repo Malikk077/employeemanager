@@ -2,6 +2,8 @@ package com.litmus7.EmployeeManager.dao;
 import com.litmus7.EmployeeManager.Dto.Employees;
 import com.litmus7.EmployeeManager.constant.SQLConstants;
 import com.litmus7.EmployeeManager.util.DBUtil;
+import com.litums7.EmployeeManager.exception.EmployeeDataAccessException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class EmployeeDao 
 {
-	public boolean doesEmployeeExist(int id)
+	public boolean doesEmployeeExist(int id) throws EmployeeDataAccessException
 	{
 		
 		try(Connection conn = DBUtil.getConnection();
@@ -27,12 +29,11 @@ public class EmployeeDao
 		 catch (SQLException e) 
 		{
 			 e.printStackTrace();
-			 System.out.println("SQL error on duplicate check"+ e.getMessage());
+			 throw new EmployeeDataAccessException("SQL error on duplicate check", e);
 		}
-		return false;
 	}
 	
-	public boolean saveEmployee(Employees employee) throws NullPointerException , IllegalArgumentException
+	public boolean saveEmployee(Employees employee)  throws EmployeeDataAccessException 
 	{
 		
 
@@ -48,20 +49,21 @@ public class EmployeeDao
 		    stmt.setString(6, employee.getDepartment());
 		    stmt.setDouble(7, employee.getSalary());
 
-		    // Convert java.util.Date to java.sql.Date
+		    // Convert javat.util.Date to java.sql.Date
 		    java.sql.Date sqlDate = new java.sql.Date(employee.getJoinDate().getTime());
 		    stmt.setDate(8, sqlDate);
 		    int rowsInserted = stmt.executeUpdate();
 	        return rowsInserted > 0;		
-		} 
-		catch (SQLException  e) {
-		    System.out.println("Error while saving employee data: " + e.getMessage());
-		    e.printStackTrace();
-		    return false;
+		} catch (SQLException e) {	
+			e.printStackTrace();
+		    throw new EmployeeDataAccessException("Database error", e);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		    throw new EmployeeDataAccessException("Employee data is incomplete", e);
 		}
 	}
 
-	public List<Employees> selectAllEmployees() throws NullPointerException , IllegalArgumentException
+	public List<Employees> selectAllEmployees()  throws EmployeeDataAccessException 
 	{
 		List<Employees> employees =new ArrayList<>();
 		
@@ -81,13 +83,14 @@ public class EmployeeDao
 //				emp.setSalary(result.getDouble(SQLConstants.SALARY));
 //				emp.setJoinDate(result.getDate(SQLConstants.JOIN_DATE));
 				employees.add(emp);
-			}
-				
-		 }
-		catch (SQLException  e) {
-		    System.out.println("Error while fetching employee data: " + e.getMessage());
-		    e.printStackTrace();
-		}
+			}	
+		}catch (SQLException e) {
+			e.printStackTrace();
+	        throw new EmployeeDataAccessException("Error while fetching employee data", e);
+	    } catch (NullPointerException e) {
+	    	e.printStackTrace();
+	        throw new EmployeeDataAccessException("Unexpected null value encountered", e);
+	    }
 		return employees;
 	}
 }

@@ -42,7 +42,7 @@ public class EmployeeManagerController {
 	    }
 	     catch (Exception e) {
 	        e.printStackTrace(); // log full stack trace
-	        return new Response<>(500, "Unexpected error occurred.");
+	        return new Response<>(500, "Unexpected error occurred. "+e.getMessage());
 	    }
 	    
 	}

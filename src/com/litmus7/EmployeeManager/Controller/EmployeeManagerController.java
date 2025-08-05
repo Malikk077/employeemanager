@@ -49,13 +49,14 @@ public class EmployeeManagerController {
 	{
 		List<Employees> employees=new ArrayList<>();
 		try{
+
 			employees=employeeService.readAllFromDb();	
 			return new Response<>(200,"data Fetched Succesfully",employees);
 			
 		}catch (EmployeeServiceException e) {
 	        return new Response<>(500, "Exception while fetching data: " + e.getMessage());
 	    }
-		
-		
 	}
+		
 }
+	

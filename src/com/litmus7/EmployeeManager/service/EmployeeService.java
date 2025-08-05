@@ -43,24 +43,11 @@ public class EmployeeService {
     		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     		    employee.setJoinDate(sdf.parse(values[7].trim()));		
     		 }
-    		catch(NumberFormatException e)
-    		{
-    			System.err.println("Number format error in row " + count.get("total") + ": " + e.getMessage());
-                count.put("failure", count.get("failure") + 1);
-                continue;
+    		catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
+    		    System.err.println("Error in row " + count.get("total") + ": " + e.getClass().getSimpleName() + " - " + e.getMessage());
+    		    count.put("failure", count.get("failure") + 1);
+    		    continue;
     		}
-    		catch(ParseException e)
-    		{
-    			 System.err.println("Date parse error in row " + count.get("total") + ": " + e.getMessage());
-    	            count.put("failure", count.get("failure") + 1);
-    	            continue;
-    	        }
-    		catch(ArrayIndexOutOfBoundsException e)
-    		{
-                System.err.println("Missing field in row " + count.get("total") + ": " + e.getMessage());
-                count.put("failure", count.get("failure") + 1);
-                continue;
-            }
     		if (!ValidationUtil.validateEmployee(employee)){
     			count.put("failure", count.get("failure") + 1);
     			continue;		

@@ -39,10 +39,9 @@ public class EmployeeManagerController {
 		        return new Response<>(207, "Partial insert: " + successCount + " of " + totalCount + " inserted.", successCount);
 		    } else
 		        return new Response<>(200, null, successCount); 
-	    }
-	     catch (Exception e) {
+	    }catch (Exception e) {
 	        e.printStackTrace(); // log full stack trace
-	        return new Response<>(500, "Unexpected error occurred.");
+	        return new Response<>(500, "Unexpected error occurred. "+e.getMessage());
 	    }
 	    
 	}
@@ -51,13 +50,12 @@ public class EmployeeManagerController {
 		List<Employees> employees=new ArrayList<>();
 		try{
 			employees=employeeService.readAllFromDb();	
-		}
-		catch (EmployeeServiceException e) {
+			return new Response<>(200,"data Fetched Succesfully",employees);
+			
+		}catch (EmployeeServiceException e) {
 	        return new Response<>(500, "Exception while fetching data: " + e.getMessage());
 	    }
-		if (employees == null || employees.isEmpty()) {
-	        return new Response<>(500, "Failed to fetch data");
-	    }
-		return new Response<>(200,"data Fetched Succesfully",employees);
+		
+		
 	}
 }

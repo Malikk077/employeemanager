@@ -1,5 +1,6 @@
 package com.litmus7.EmployeeManager.Controller;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.litmus7.EmployeeManager.Dto.Employees;
@@ -13,16 +14,19 @@ public class EmployeeManagerController {
 
 	public Response<Integer> writeDataToDb(String file)
 	{
+		Map<String, Integer> output = new HashMap<>();
 	    try {
 	    	if (file == null || file.trim().isEmpty()) {
 		        return new Response<>(502, "File path is missing.");
-		    }
-
-		    if (!file.toLowerCase().endsWith(".csv")) {
+		    }if (!file.toLowerCase().endsWith(".csv")) {
 		        return new Response<>(501, "Provided file is not a CSV.");
 		    }
-		    
-	        Map<String, Integer> output = employeeService.writeToDb(file);
+		    try{
+	            output = employeeService.writeToDb(file);
+	        }catch(EmployeeServiceException e){
+	        	e.printStackTrace();
+	        	return new Response<>(500, " error occurred  : "+e.getMessage());
+	        }
 
 	        int successCount = output.getOrDefault("success", 0);
 //	        int failureCount = output.getOrDefault("failure", 0);
@@ -36,8 +40,6 @@ public class EmployeeManagerController {
 		    } else
 		        return new Response<>(200, null, successCount); 
 	    }
-	    
-	
 	     catch (Exception e) {
 	        e.printStackTrace(); // log full stack trace
 	        return new Response<>(500, "Unexpected error occurred.");

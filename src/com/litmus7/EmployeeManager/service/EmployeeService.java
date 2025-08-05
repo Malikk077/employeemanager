@@ -1,10 +1,10 @@
 package com.litmus7.EmployeeManager.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.litmus7.EmployeeManager.util.CsvUtil;
 import com.litmus7.EmployeeManager.util.ValidationUtil;
 import com.litums7.EmployeeManager.exception.EmployeeDataAccessException;
@@ -15,15 +15,18 @@ import com.litmus7.EmployeeManager.dao.EmployeeDao;
 public class EmployeeService {
 	
     EmployeeDao employeeDao = new EmployeeDao();
-	public Map<String, Integer> writeToDb (String file)  
+	public Map<String, Integer> writeToDb (String file) throws EmployeeServiceException  
 	{
+		List<String[]> records=new ArrayList<>();
 		Map<String, Integer> count=new HashMap<>();    
 		count.put("total", 0);
 		count.put("success", 0);
 		count.put("failure", 0);
-		
-		
-		List<String[]> records = CsvUtil.readCSV(file);
+		try {
+			 records = CsvUtil.readCSV(file);
+		}catch(EmployeeDataAccessException e){
+			throw new EmployeeServiceException(e);
+		}
         
 		for (String[] values : records) 
         {
@@ -42,8 +45,7 @@ public class EmployeeService {
     		    
     		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     		    employee.setJoinDate(sdf.parse(values[7].trim()));		
-    		 }
-    		catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
+    	   }catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {
     		    System.err.println("Error in row " + count.get("total") + ": " + e.getClass().getSimpleName() + " - " + e.getMessage());
     		    count.put("failure", count.get("failure") + 1);
     		    continue;
@@ -56,17 +58,17 @@ public class EmployeeService {
     			if (employeeDao.doesEmployeeExist(employee.getEmployeeId())){
         			count.put("failure", count.get("failure") + 1);
         			continue;
-    			}	 
-    			if (employeeDao.saveEmployee(employee)) {
+    			}if (employeeDao.saveEmployee(employee)) {
                     count.put("success", count.get("success") + 1);
                 } else {
                     count.put("failure", count.get("failure") + 1);
                 }	
-    		}
-    	    catch(EmployeeDataAccessException e) {
+    		}catch(EmployeeDataAccessException e) {
     	    	System.err.println("Database error while processing row " + count.get("total") + ": " + e.getMessage());
                 count.put("failure", count.get("failure") + 1);
-                // Do not throw here — continue to next record
+                if (e.getCause() instanceof java.sql.SQLNonTransientConnectionException) {
+                    throw new EmployeeServiceException("Fatal DB error: Connection lost", e);
+                }
             }    	
         }	
 		return count;
@@ -83,9 +85,7 @@ public class EmployeeService {
 		}
 		catch(EmployeeDataAccessException e) {
 			System.err.println("Error: " + e.getMessage());
-			throw new EmployeeServiceException(e);
-		    
-		   
+			throw new EmployeeServiceException(e);	     
 		}
 		
 

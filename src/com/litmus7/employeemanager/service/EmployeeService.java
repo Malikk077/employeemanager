@@ -32,6 +32,11 @@ public class EmployeeService {
         {
 			count.put("total", count.get("total") + 1);
         	Employee employee =new Employee();
+        	if (values.length < 8) {
+    		    System.err.println("Skipping row " + count.get("total") + ": Incomplete data.");
+    		    count.put("failure", count.get("failure") + 1);
+    		    continue;
+    		}
     		try
     		{
     			employee.setEmployeeId(Integer.parseInt(values[0].trim()));
@@ -50,6 +55,7 @@ public class EmployeeService {
     		    count.put("failure", count.get("failure") + 1);
     		    continue;
     		}
+    		
     		if (!ValidationUtil.validateEmployee(employee)){
     			count.put("failure", count.get("failure") + 1);
     			continue;		

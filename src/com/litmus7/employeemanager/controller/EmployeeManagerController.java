@@ -50,7 +50,10 @@ public class EmployeeManagerController {
 	{
 		try{
 
-			List<Employee> employees=employeeService.readAllFromDb();	
+			List<Employee> employees=employeeService.readAllFromDb();
+			if(employees==null || employees.isEmpty())
+				return new Response<>(Constant.NO_DATA_FOUND,"No Records Found !!! ");
+			else
 			return new Response<>(Constant.SUCCESS,"data Fetched Succesfully",employees);
 			
 		}catch (EmployeeServiceException e) {
@@ -61,11 +64,54 @@ public class EmployeeManagerController {
 	public Response<Employee> getEmployeeById(int employeeId) {
 		try {
 			Employee employee = employeeService.getEmployeeById(employeeId);
+			if(employee==null)
+				return new Response<>(Constant.NO_DATA_FOUND,"Employee Doesnt Exist !!! ");
+			else	
 			return new Response<>(Constant.SUCCESS,"Record fetched Succesfully: ",employee);	
 		}catch(EmployeeServiceException e) {
 			return new Response<>(Constant.FAILURE, "Exception while fetching data: " + e.getMessage());
-		}
-		
+		}		
 	}
+	
+	
+	public Response<Integer>  updateEmployee(Employee employee)
+	{
+		try{
+			int result=employeeService.updateEmployee(employee);
+			if (result>0)
+				return new Response<>(Constant.SUCCESS,"Record updated Succesfully, Rows Affected: ",result);
+			else
+				return new Response<>(Constant.FAILURE, "Record update failed, Rows Affected: " ,result);		
+		}catch(EmployeeServiceException e) {
+			return new Response<>(Constant.FAILURE, "Exception while fetching data: " + e.getMessage());
+		}
+	}
+	
+	public Response<Integer>  deleteEmployeeById(int employeeId)
+	{
+		try{
+			int result=employeeService.deleteEmployeeById(employeeId);
+			if (result>0)
+				return new Response<>(Constant.SUCCESS,"Record Deleted Succesfully, Rows Affected: ",result);
+			else
+				return new Response<>(Constant.FAILURE, "Record Deletion failed, Rows Affected: " ,0);		
+		}catch(EmployeeServiceException e) {
+			return new Response<>(Constant.FAILURE, "Exception while Deleting data: " + e.getMessage());
+		}
+	}
+	
+	public Response<Integer> addEmployee(Employee employee)
+	{
+		try {
+			if (employeeService.addEmployee(employee))
+				return new Response<>(Constant.SUCCESS,"Record Inserted Succesfully, Row Id : ",employee.getEmployeeId());
+			else
+				return new Response<>(Constant.FAILURE, "Record Insertion failed, Rows Affected: " ,0);			
+		}catch(EmployeeServiceException e) {
+			return new Response<>(Constant.FAILURE, "Exception while Inserting data: " + e.getMessage());
+		}
+	}
+		
+	
 }
 	

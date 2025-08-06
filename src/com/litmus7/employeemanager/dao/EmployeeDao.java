@@ -113,8 +113,56 @@ public class EmployeeDao
 	        throw new EmployeeDataAccessException("Error while fetching employee data", e);
 		}
 		return null;
-
+		}
+	
+	public int updateEmployee(Employee employee) throws EmployeeDataAccessException{
 		
+	   if(!doesEmployeeExist(employee.getEmployeeId()))
+		   throw new EmployeeDataAccessException("Employee Does not Exist !!!");
+	
+		try (Connection connection = DBUtil.getConnection();
+			     PreparedStatement stmt = connection.prepareStatement(SQLConstants.UPDATE_EMPLOYEE_BY_ID);) 
+		{		
+		    stmt.setString(1, employee.getFirstName());
+		    stmt.setString(2, employee.getLastName());
+		    stmt.setString(3, employee.getEmail());
+		    stmt.setString(4, employee.getPhone());
+		    stmt.setString(5, employee.getDepartment());
+		    stmt.setDouble(6, employee.getSalary());
+		    // Convert javat.util.Date to java.sql.Date
+		    java.sql.Date sqlDate = new java.sql.Date(employee.getJoinDate().getTime());
+		    stmt.setDate(7, sqlDate);
+		    
+		    //WHERE CLAUSE
+		    stmt.setInt(8, employee.getEmployeeId());
+		    
+		    int rowsAffected = stmt.executeUpdate();
+	        return rowsAffected ; 
+		}catch (SQLException e) {
+			e.printStackTrace();
+	        throw new EmployeeDataAccessException("Error while updating employee data", e);
+		}
 	}
+	
+	public int deleteEmployee(int employeeId) throws EmployeeDataAccessException{
+		
+		   if(!doesEmployeeExist(employeeId))
+			   throw new EmployeeDataAccessException("Employee Does not Exist !!!");
+		
+			try (Connection connection = DBUtil.getConnection();
+				     PreparedStatement stmt = connection.prepareStatement(SQLConstants.DELETE_FROM_EMPLOYEES_WITH_ID);) 
+			{		
+			    stmt.setInt(1,employeeId );
+			   
+			    int rowsAffected = stmt.executeUpdate();
+		        return rowsAffected ; 
+			}catch (SQLException e) {
+				e.printStackTrace();
+		        throw new EmployeeDataAccessException("Error while Deleting employee data", e);
+			}
+		}
+	
+	
+	
 }
 	

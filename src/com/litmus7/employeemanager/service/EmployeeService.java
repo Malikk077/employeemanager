@@ -79,19 +79,41 @@ public class EmployeeService {
 			return employeeDao.selectAllEmployees();
 		}
 		catch(EmployeeDataAccessException e) {
-			System.err.println("Error: " + e.getMessage());
 			throw new EmployeeServiceException(e);	     
 		}
 	}
 	
 	public Employee getEmployeeById(int employeeId) throws EmployeeServiceException
 	{
-		
 		try{
 			return employeeDao.findById(employeeId);
 		}
 		catch(EmployeeDataAccessException e) {
-			System.err.println("Error: " + e.getMessage());
+			throw new EmployeeServiceException(e);	     
+		}
+	}
+	
+	public int updateEmployee(Employee employee) throws EmployeeServiceException{
+		try {
+			return employeeDao.updateEmployee(employee);
+		}catch(EmployeeDataAccessException e) {
+			throw new EmployeeServiceException(e);	     
+		}
+	}
+	
+	public int deleteEmployeeById(int employeeId) throws EmployeeServiceException{
+		try {
+			return employeeDao.deleteEmployee(employeeId);
+		}catch(EmployeeDataAccessException e) {
+			throw new EmployeeServiceException(e);	     
+		}
+	}
+	public boolean addEmployee(Employee employee) throws EmployeeServiceException{
+		try {
+			if(employeeDao.doesEmployeeExist(employee.getEmployeeId()))
+				throw new EmployeeServiceException("Employee Already Exists !!!");
+			return employeeDao.saveEmployee(employee);
+		}catch(EmployeeDataAccessException e) {
 			throw new EmployeeServiceException(e);	     
 		}
 	}

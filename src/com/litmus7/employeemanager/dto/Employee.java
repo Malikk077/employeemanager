@@ -1,5 +1,7 @@
 package com.litmus7.employeemanager.dto;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class Employee {
@@ -58,6 +60,15 @@ public class Employee {
 	}
 	public void setJoinDate(Date joinDate) {
 		this.joinDate = joinDate;
+	}
+	
+	// Overloaded method for LocalDate
+	public void setJoinDate(LocalDate localDate) {
+	    if (localDate != null) {
+	        this.joinDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+	    } else {
+	        this.joinDate = null;
+	    }
 	}
 	public String toDetailedString() {
 	        return 

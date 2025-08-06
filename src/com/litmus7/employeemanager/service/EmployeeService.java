@@ -64,18 +64,13 @@ public class EmployeeService {
                     count.put("failure", count.get("failure") + 1);
                 }	
     		}catch(EmployeeDataAccessException e) {
-    	    	System.err.println("Database error while processing row " + count.get("total") + ": " + e.getMessage());
-                count.put("failure", count.get("failure") + 1);
-                if (e.getCause() instanceof java.sql.SQLNonTransientConnectionException) {
+
                     throw new EmployeeServiceException("Fatal DB error: Connection lost", e);
                 }
             }    	
-        }	
+        	
 		return count;
 	}
-    			
-    		
-    		
 
 	public List<Employee> readAllFromDb() throws EmployeeServiceException
 	{
@@ -87,8 +82,21 @@ public class EmployeeService {
 			System.err.println("Error: " + e.getMessage());
 			throw new EmployeeServiceException(e);	     
 		}
-		
-
 	}
+	
+	public Employee getEmployeeById(int employeeId) throws EmployeeServiceException
+	{
+		
+		try{
+			return employeeDao.findById(employeeId);
+		}
+		catch(EmployeeDataAccessException e) {
+			System.err.println("Error: " + e.getMessage());
+			throw new EmployeeServiceException(e);	     
+		}
+	}
+	
+	
+	
 
 }

@@ -34,6 +34,17 @@ public class EmployeeManagerClient {
 			System.out.println("Message: " + employeesResponse.getErrorMessage());
 		}
 		
+		Response<Employee> getEmployeeByIdResponse =controller.getEmployeeById(102);
+		if (getEmployeeByIdResponse.getStatusCode()==200) 
+		{
+			Employee employee=getEmployeeByIdResponse.getData();
+			System.out.println(employee.toDetailedString());
+		}else {
+		    System.out.println("Message: " + getEmployeeByIdResponse.getErrorMessage());
+		}
+
+
+		
 	}
 
 }

@@ -1,5 +1,4 @@
 package com.litmus7.employeemanager.controller;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +6,8 @@ import com.litmus7.employeemanager.dto.Employee;
 import com.litmus7.employeemanager.dto.Response;
 import com.litmus7.employeemanager.service.EmployeeService;
 import com.litmus7.employeemanager.exception.EmployeeServiceException;
+import com.litmus7.employeemanager.constant.Constant;
+
 
 public class EmployeeManagerController {
 	EmployeeService employeeService =new EmployeeService();
@@ -17,15 +18,15 @@ public class EmployeeManagerController {
 		Map<String, Integer> output = new HashMap<>();
 	    try {
 	    	if (file == null || file.trim().isEmpty()) {
-		        return new Response<>(502, "File path is missing.");
+		        return new Response<>(Constant.FILE_PATH_MISSING , "File path is missing.");
 		    }if (!file.toLowerCase().endsWith(".csv")) {
-		        return new Response<>(501, "Provided file is not a CSV.");
+		        return new Response<>(Constant.FILE_NOT_CSV, "Provided file is not a CSV.");
 		    }
 		    try{
 	            output = employeeService.writeToDb(file);
 	        }catch(EmployeeServiceException e){
 	        	e.printStackTrace();
-	        	return new Response<>(500, " error occurred  : "+e.getMessage());
+	        	return new Response<>(Constant.FAILURE, " error occurred  : "+e.getMessage());
 	        }
 
 	        int successCount = output.getOrDefault("success", 0);
@@ -34,29 +35,37 @@ public class EmployeeManagerController {
 
 	        
 	        if (successCount == 0) {
-		        return new Response<>(500, "No records were inserted.");
+		        return new Response<>(Constant.FAILURE, "No records were inserted.");
 		    } else if (successCount < totalCount) {
-		        return new Response<>(207, "Partial insert: " + successCount + " of " + totalCount + " inserted.", successCount);
+		        return new Response<>(Constant.PARTIAL_SUCCESS, "Partial insert: " + successCount + " of " + totalCount + " inserted.", successCount);
 		    } else
-		        return new Response<>(200, null, successCount); 
+		        return new Response<>(Constant.SUCCESS, null, successCount); 
 	    }catch (Exception e) {
 	        e.printStackTrace(); // log full stack trace
-	        return new Response<>(500, "Unexpected error occurred. "+e.getMessage());
+	        return new Response<>(Constant.FAILURE, "Unexpected error occurred. "+e.getMessage());
 	    }
 	    
 	}
 	public Response<List<Employee>> getAllEmployees()
 	{
-		List<Employee> employees=new ArrayList<>();
 		try{
 
-			employees=employeeService.readAllFromDb();	
-			return new Response<>(200,"data Fetched Succesfully",employees);
+			List<Employee> employees=employeeService.readAllFromDb();	
+			return new Response<>(Constant.SUCCESS,"data Fetched Succesfully",employees);
 			
 		}catch (EmployeeServiceException e) {
-	        return new Response<>(500, "Exception while fetching data: " + e.getMessage());
+	        return new Response<>(Constant.FAILURE, "Exception while fetching data: " + e.getMessage());
 	    }
 	}
+	
+	public Response<Employee> getEmployeeById(int employeeId) {
+		try {
+			Employee employee = employeeService.getEmployeeById(employeeId);
+			return new Response<>(Constant.SUCCESS,"Record fetched Succesfully: ",employee);	
+		}catch(EmployeeServiceException e) {
+			return new Response<>(Constant.FAILURE, "Exception while fetching data: " + e.getMessage());
+		}
 		
+	}
 }
 	

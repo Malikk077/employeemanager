@@ -18,8 +18,8 @@ public class EmployeeDao
 	public boolean doesEmployeeExist(int id) throws EmployeeDataAccessException
 	{
 		
-		try(Connection conn = DBUtil.getConnection();
-	             PreparedStatement stmt = conn.prepareStatement(SQLConstants.SELECT_1_FROM_EMPLOYEES);) 
+		try(Connection connection = DBUtil.getConnection();
+	             PreparedStatement stmt = connection.prepareStatement(SQLConstants.SELECT_1_FROM_EMPLOYEES);) 
 		{
 			stmt.setInt(1, id);
 			try (ResultSet result = stmt.executeQuery()) {
@@ -36,9 +36,8 @@ public class EmployeeDao
 	public boolean saveEmployee(Employee employee)  throws EmployeeDataAccessException 
 	{
 		
-
-		try (Connection conn = DBUtil.getConnection();
-		     PreparedStatement stmt = conn.prepareStatement(SQLConstants.INSERT_TO_EMPLOYEES)) 
+		try (Connection connection = DBUtil.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(SQLConstants.INSERT_TO_EMPLOYEES)) 
 		{
 
 		    stmt.setInt(1, employee.getEmployeeId());
@@ -57,40 +56,65 @@ public class EmployeeDao
 		} catch (SQLException e) {	
 			e.printStackTrace();
 		    throw new EmployeeDataAccessException("Database error", e);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		    throw new EmployeeDataAccessException("Employee data is incomplete", e);
-		}
+		} 
 	}
 
 	public List<Employee> selectAllEmployees()  throws EmployeeDataAccessException 
 	{
 		List<Employee> employees =new ArrayList<>();
 		
-		try (Connection conn = DBUtil.getConnection();
-			     PreparedStatement stmt = conn.prepareStatement(SQLConstants.SELECT_ALL_EMPLOYEES);
+		try (Connection connection = DBUtil.getConnection();
+			     PreparedStatement stmt = connection.prepareStatement(SQLConstants.SELECT_ALL_EMPLOYEES);
 				ResultSet result=stmt.executeQuery();) 
 		{
 			while(result.next()) 
 			{
-				Employee emp =new Employee();
-				emp.setEmployeeId(result.getInt(SQLConstants.EMP_ID));
-				emp.setFirstName(result.getString(SQLConstants.FIRST_NAME));
-				emp.setLastName(result.getString(SQLConstants.LAST_NAME));
-				emp.setEmail(result.getString(SQLConstants.EMAIL));
-				emp.setPhone(result.getString(SQLConstants.PHONE));
-				emp.setDepartment(result.getString(SQLConstants.DEPARTMENT));
-//				emp.setSalary(result.getDouble(SQLConstants.SALARY));
-//				emp.setJoinDate(result.getDate(SQLConstants.JOIN_DATE));
-				employees.add(emp);
+				Employee employee =new Employee();
+				employee.setEmployeeId(result.getInt(SQLConstants.EMP_ID));
+				employee.setFirstName(result.getString(SQLConstants.FIRST_NAME));
+				employee.setLastName(result.getString(SQLConstants.LAST_NAME));
+				employee.setEmail(result.getString(SQLConstants.EMAIL));
+				employee.setPhone(result.getString(SQLConstants.PHONE));
+				employee.setDepartment(result.getString(SQLConstants.DEPARTMENT));
+//				employee.setSalary(result.getDouble(SQLConstants.SALARY));
+//				employee.setJoinDate(result.getDate(SQLConstants.JOIN_DATE));
+				employees.add(employee);
 			}	
 		}catch (SQLException e) {
 			e.printStackTrace();
 	        throw new EmployeeDataAccessException("Error while fetching employee data", e);
-	    } catch (NullPointerException e) {
-	    	e.printStackTrace();
-	        throw new EmployeeDataAccessException("Unexpected null value encountered", e);
-	    }
+		}
 		return employees;
 	}
+
+	public Employee findById(int employeeId) throws EmployeeDataAccessException {
+		
+		try (Connection connection = DBUtil.getConnection();
+			     PreparedStatement stmt = connection.prepareStatement(SQLConstants.SELECT_EMPLOYEE_BY_ID);) 
+		{
+			stmt.setInt(1, employeeId);
+			try (ResultSet result=stmt.executeQuery();){
+				while(result.next()) 
+				{
+					Employee employee =new Employee();
+					employee.setEmployeeId(result.getInt(SQLConstants.EMP_ID));
+					employee.setFirstName(result.getString(SQLConstants.FIRST_NAME));
+					employee.setLastName(result.getString(SQLConstants.LAST_NAME));
+					employee.setEmail(result.getString(SQLConstants.EMAIL));
+					employee.setPhone(result.getString(SQLConstants.PHONE));
+					employee.setDepartment(result.getString(SQLConstants.DEPARTMENT));
+					employee.setSalary(result.getDouble(SQLConstants.SALARY));
+					employee.setJoinDate(result.getDate(SQLConstants.JOIN_DATE));
+					return employee;
+				}	
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+	        throw new EmployeeDataAccessException("Error while fetching employee data", e);
+		}
+		return null;
+
+		
+	}
 }
+	

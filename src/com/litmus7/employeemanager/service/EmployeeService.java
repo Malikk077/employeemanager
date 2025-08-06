@@ -25,7 +25,7 @@ public class EmployeeService {
 		try {
 			 records = CsvUtil.readCSV(file);
 		}catch(EmployeeDataAccessException e){
-			throw new EmployeeServiceException(e);
+			throw new EmployeeServiceException("Failed to write Csv File",e);
 		}
         
 		for (String[] values : records) 

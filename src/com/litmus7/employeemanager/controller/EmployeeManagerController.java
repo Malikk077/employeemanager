@@ -1,5 +1,4 @@
 package com.litmus7.employeemanager.controller;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.litmus7.employeemanager.dto.Employee;
@@ -15,32 +14,29 @@ public class EmployeeManagerController {
 
 	public Response<Integer> writeDataToDb(String file)
 	{
-		Map<String, Integer> output = new HashMap<>();
 	    try {
 	    	if (file == null || file.trim().isEmpty()) {
 		        return new Response<>(Constant.FILE_PATH_MISSING , "File path is missing.");
 		    }if (!file.toLowerCase().endsWith(".csv")) {
 		        return new Response<>(Constant.FILE_NOT_CSV, "Provided file is not a CSV.");
 		    }
-		    try{
-	            output = employeeService.writeToDb(file);
-	        }catch(EmployeeServiceException e){
-	        	e.printStackTrace();
-	        	return new Response<>(Constant.FAILURE, " error occurred  : "+e.getMessage());
-	        }
-
+		    
+		    Map<String, Integer> output = employeeService.writeToDb(file);
+	  
 	        int successCount = output.getOrDefault("success", 0);
 //	        int failureCount = output.getOrDefault("failure", 0);
 	        int totalCount   = output.getOrDefault("total", 0);
 
-	        
 	        if (successCount == 0) {
 		        return new Response<>(Constant.FAILURE, "No records were inserted.");
 		    } else if (successCount < totalCount) {
 		        return new Response<>(Constant.PARTIAL_SUCCESS, "Partial insert: " + successCount + " of " + totalCount + " inserted.", successCount);
 		    } else
 		        return new Response<>(Constant.SUCCESS, null, successCount); 
-	    }catch (Exception e) {
+	    }catch(EmployeeServiceException e){
+        	e.printStackTrace();
+        	return new Response<>(Constant.FAILURE, " error occurred  : "+e.getMessage());
+        }catch (Exception e) {
 	        e.printStackTrace(); // log full stack trace
 	        return new Response<>(Constant.FAILURE, "Unexpected error occurred. "+e.getMessage());
 	    }

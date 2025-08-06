@@ -1,7 +1,7 @@
-package com.litmus7.EmployeeManager.util;
+package com.litmus7.employeemanager.util;
 
 import java.util.regex.Pattern;
-import com.litmus7.EmployeeManager.Dto.Employees;
+import com.litmus7.employeemanager.dto.Employee;
 
 public class ValidationUtil {
     private static final Pattern EMAIL_REGEX = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
@@ -27,7 +27,7 @@ public class ValidationUtil {
         return date != null;
     }
 
-    public static boolean validateEmployee(Employees emp) {
+    public static boolean validateEmployee(Employee emp) {
         return emp.getEmployeeId() > 0
             && isNonEmpty(emp.getFirstName())
             && isNonEmpty(emp.getLastName())

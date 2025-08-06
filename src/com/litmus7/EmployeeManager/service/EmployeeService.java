@@ -1,16 +1,16 @@
-package com.litmus7.EmployeeManager.service;
+package com.litmus7.employeemanager.service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.litmus7.EmployeeManager.util.CsvUtil;
-import com.litmus7.EmployeeManager.util.ValidationUtil;
-import com.litums7.EmployeeManager.exception.EmployeeDataAccessException;
-import com.litums7.EmployeeManager.exception.EmployeeServiceException;
-import com.litmus7.EmployeeManager.Dto.Employees;
-import com.litmus7.EmployeeManager.dao.EmployeeDao;
+import com.litmus7.employeemanager.util.CsvUtil;
+import com.litmus7.employeemanager.util.ValidationUtil;
+import com.litmus7.employeemanager.exception.EmployeeDataAccessException;
+import com.litmus7.employeemanager.exception.EmployeeServiceException;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.dao.EmployeeDao;
 
 public class EmployeeService {
 	
@@ -31,7 +31,7 @@ public class EmployeeService {
 		for (String[] values : records) 
         {
 			count.put("total", count.get("total") + 1);
-        	Employees employee =new Employees();
+        	Employee employee =new Employee();
     		try
     		{
     			employee.setEmployeeId(Integer.parseInt(values[0].trim()));
@@ -77,7 +77,7 @@ public class EmployeeService {
     		
     		
 
-	public List<Employees> readAllFromDb() throws EmployeeServiceException
+	public List<Employee> readAllFromDb() throws EmployeeServiceException
 	{
 		
 		try{

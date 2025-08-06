@@ -1,8 +1,8 @@
-package com.litmus7.EmployeeManager.Dto;
+package com.litmus7.employeemanager.dto;
 
 import java.util.Date;
 
-public class Employees {
+public class Employee {
 	private int employeeId ;
 	private String firstName ;
 	private String lastName ;

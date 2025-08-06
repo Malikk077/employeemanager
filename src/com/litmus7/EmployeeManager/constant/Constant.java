@@ -1,4 +1,4 @@
-package com.litmus7.EmployeeManager.constant;
+package com.litmus7.employeemanager.constant;
 
 public class Constant {
 	public static final int SUCCESS = 200;

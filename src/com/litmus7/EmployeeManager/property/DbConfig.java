@@ -1,4 +1,4 @@
-package com.litmus7.EmployeeManager.property;
+package com.litmus7.employeemanager.property;
 
 import java.io.IOException;
 import java.io.InputStream;

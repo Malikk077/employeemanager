@@ -1,8 +1,8 @@
-package com.litmus7.EmployeeManager.dao;
-import com.litmus7.EmployeeManager.Dto.Employees;
-import com.litmus7.EmployeeManager.constant.SQLConstants;
-import com.litmus7.EmployeeManager.util.DBUtil;
-import com.litums7.EmployeeManager.exception.EmployeeDataAccessException;
+package com.litmus7.employeemanager.dao;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.constant.SQLConstants;
+import com.litmus7.employeemanager.util.DBUtil;
+import com.litmus7.employeemanager.exception.EmployeeDataAccessException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +33,7 @@ public class EmployeeDao
 		}
 	}
 	
-	public boolean saveEmployee(Employees employee)  throws EmployeeDataAccessException 
+	public boolean saveEmployee(Employee employee)  throws EmployeeDataAccessException 
 	{
 		
 
@@ -63,9 +63,9 @@ public class EmployeeDao
 		}
 	}
 
-	public List<Employees> selectAllEmployees()  throws EmployeeDataAccessException 
+	public List<Employee> selectAllEmployees()  throws EmployeeDataAccessException 
 	{
-		List<Employees> employees =new ArrayList<>();
+		List<Employee> employees =new ArrayList<>();
 		
 		try (Connection conn = DBUtil.getConnection();
 			     PreparedStatement stmt = conn.prepareStatement(SQLConstants.SELECT_ALL_EMPLOYEES);
@@ -73,7 +73,7 @@ public class EmployeeDao
 		{
 			while(result.next()) 
 			{
-				Employees emp =new Employees();
+				Employee emp =new Employee();
 				emp.setEmployeeId(result.getInt(SQLConstants.EMP_ID));
 				emp.setFirstName(result.getString(SQLConstants.FIRST_NAME));
 				emp.setLastName(result.getString(SQLConstants.LAST_NAME));

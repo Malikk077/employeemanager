@@ -1,4 +1,4 @@
-package com.litmus7.EmployeeManager.Dto;
+package com.litmus7.employeemanager.dto;
 
 public class Response <T> {
 	private int statusCode;

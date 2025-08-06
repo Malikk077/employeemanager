@@ -1,4 +1,4 @@
-package com.litmus7.EmployeeManager.constant;
+package com.litmus7.employeemanager.constant;
 
 public class SQLConstants {
   public static final String INSERT_TO_EMPLOYEES="INSERT INTO employees (emp_id, first_name, last_name, email, phone, department, salary, join_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";

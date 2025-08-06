@@ -1,12 +1,12 @@
-package com.litmus7.EmployeeManager.Controller;
+package com.litmus7.employeemanager.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.litmus7.EmployeeManager.Dto.Employees;
-import com.litmus7.EmployeeManager.Dto.Response;
-import com.litmus7.EmployeeManager.service.EmployeeService;
-import com.litums7.EmployeeManager.exception.EmployeeServiceException;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.dto.Response;
+import com.litmus7.employeemanager.service.EmployeeService;
+import com.litmus7.employeemanager.exception.EmployeeServiceException;
 
 public class EmployeeManagerController {
 	EmployeeService employeeService =new EmployeeService();
@@ -45,9 +45,9 @@ public class EmployeeManagerController {
 	    }
 	    
 	}
-	public Response<List<Employees>> getAllEmployees()
+	public Response<List<Employee>> getAllEmployees()
 	{
-		List<Employees> employees=new ArrayList<>();
+		List<Employee> employees=new ArrayList<>();
 		try{
 
 			employees=employeeService.readAllFromDb();	

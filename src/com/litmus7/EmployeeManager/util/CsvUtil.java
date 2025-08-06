@@ -1,10 +1,10 @@
-package com.litmus7.EmployeeManager.util;
+package com.litmus7.employeemanager.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import com.litums7.EmployeeManager.exception.EmployeeDataAccessException;
+import com.litmus7.employeemanager.exception.EmployeeDataAccessException;
 
 public class CsvUtil 
 {

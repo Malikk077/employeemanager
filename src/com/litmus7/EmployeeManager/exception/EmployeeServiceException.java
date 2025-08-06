@@ -1,4 +1,4 @@
-package com.litums7.EmployeeManager.exception;
+package com.litmus7.employeemanager.exception;
 
 public class EmployeeServiceException extends  Exception{
 

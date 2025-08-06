@@ -1,8 +1,8 @@
-package com.litmus7.EmployeeManager.UI;
+package com.litmus7.employeemanager.ui;
 import java.util.List;
-import com.litmus7.EmployeeManager.Controller.EmployeeManagerController;
-import com.litmus7.EmployeeManager.Dto.Employees;
-import com.litmus7.EmployeeManager.Dto.Response;
+import com.litmus7.employeemanager.controller.EmployeeManagerController;
+import com.litmus7.employeemanager.dto.Employee;
+import com.litmus7.employeemanager.dto.Response;
 
 
 
@@ -22,10 +22,10 @@ public class EmployeeManagerClient {
             System.out.println("Message: " + response.getErrorMessage());
         }
 		
-		Response<List<Employees>> employeesResponse=controller.getAllEmployees();
+		Response<List<Employee>> employeesResponse=controller.getAllEmployees();
 		if (employeesResponse.getStatusCode()==200) 
 		{
-			for (Employees emp:employeesResponse.getData())
+			for (Employee emp:employeesResponse.getData())
 			{
 				System.out.println(emp.toDetailedString());
 		    }

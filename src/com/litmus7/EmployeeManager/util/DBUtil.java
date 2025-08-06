@@ -1,9 +1,9 @@
-package com.litmus7.EmployeeManager.util;
+package com.litmus7.employeemanager.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import com.litmus7.EmployeeManager.property.DbConfig;
+import com.litmus7.employeemanager.property.DbConfig;
 
 public class DBUtil{
 	

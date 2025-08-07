@@ -1,4 +1,5 @@
 package com.litmus7.employeemanager.controller;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import com.litmus7.employeemanager.dto.Employee;
@@ -107,6 +108,33 @@ public class EmployeeManagerController {
 			return new Response<>(Constant.FAILURE, "Exception while Inserting data: " + e.getMessage());
 		}
 	}
+	public Response<Integer> batchInsertEmployees(List<Employee> employees){
+		try {
+			int[] result = employeeService.batchInsertEmployees(employees);
+			int totalUpdated = Arrays.stream(result).sum();
+			if (totalUpdated == employees.size())
+				return new Response<>(Constant.SUCCESS,"All Recocrds Inserted Successfully, Rows Inserted: ",totalUpdated);
+			else if(totalUpdated >0)
+				return new Response<>(Constant.PARTIAL_SUCCESS,"Recocrds Inserted partially, Rows Inserted: ",totalUpdated);
+			else
+				return new Response<>(Constant.FAILURE,"Recocrds Insertion Failed!!! , Rows Affected: 0");	
+		}catch(EmployeeServiceException e) {
+			return new Response<>(Constant.FAILURE, "Exception while batch Insertion : " + e.getMessage());
+		}
+	}
+	public Response<Integer> transferEmployeesToDepartment(List<Integer> employeeIds, String newDepartment){
+		try {
+			if ( employeeService.transferEmployeesToDepartment( employeeIds, newDepartment)) 
+				return new Response<>(Constant.SUCCESS,"All Recocrds Updated Successfully");
+			else 
+				return new Response<>(Constant.FAILURE,"No changes have been done");			
+		}catch(EmployeeServiceException e) {
+			return new Response<>(Constant.FAILURE, "Exception while Updating , All Changes Reverted : " + e.getMessage());	
+		}
+		
+	}
+	
+	
 		
 	
 }

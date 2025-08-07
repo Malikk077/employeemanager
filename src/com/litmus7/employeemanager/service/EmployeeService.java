@@ -101,6 +101,7 @@ public class EmployeeService {
 	
 	public int updateEmployee(Employee employee) throws EmployeeServiceException{
 		try {
+			
 			return employeeDao.updateEmployee(employee);
 		}catch(EmployeeDataAccessException e) {
 			throw new EmployeeServiceException(e);	     
@@ -124,7 +125,39 @@ public class EmployeeService {
 		}
 	}
 	
+	public int[] batchInsertEmployees(List<Employee> employees) throws EmployeeServiceException{
+		try {
+			List<Employee> refinedEmployeeList=new ArrayList<>();
+			for(Employee employee:employees) {
+				if(!employeeDao.doesEmployeeExist(employee.getEmployeeId()) && ValidationUtil.validateEmployee(employee) && (!refinedEmployeeList.contains(employee))) {
+					refinedEmployeeList.add(employee);
+				}
+			}	
+			return employeeDao.batchInsertEmployees(refinedEmployeeList);
+		}catch(EmployeeDataAccessException e){
+			throw new EmployeeServiceException(e);
+		}
+	}
+	
+	public boolean transferEmployeesToDepartment(List<Integer> employeeIds, String newDepartment)throws EmployeeServiceException{
+		try {
+			for (int employeeId:employeeIds) {
+				if (!employeeDao.doesEmployeeExist(employeeId))
+					throw new EmployeeServiceException("One or More Employees IDs Doesnt Exist");
+			}
+			return employeeDao.transferEmployeesToDepartment(employeeIds, newDepartment);	
+		}catch(EmployeeDataAccessException e) {
+			throw new EmployeeServiceException("Error During Department Transfers",e);		
+		}
+	}
+	
+	
+	
 	
 	
 
+	
+	
+	
+	
 }

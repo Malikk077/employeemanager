@@ -3,12 +3,12 @@ import com.litmus7.employeemanager.dto.Employee;
 import com.litmus7.employeemanager.constant.SQLConstants;
 import com.litmus7.employeemanager.util.DBUtil;
 import com.litmus7.employeemanager.exception.EmployeeDataAccessException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -162,7 +162,85 @@ public class EmployeeDao
 			}
 		}
 	
+	public int[] batchInsertEmployees(List<Employee> employees) throws EmployeeDataAccessException{
+		
+		try (Connection connection = DBUtil.getConnection();
+			     PreparedStatement stmt = connection.prepareStatement(SQLConstants.INSERT_TO_EMPLOYEES);) 
+		{
+			for(Employee employee:employees)
+			{
+				stmt.setInt(1, employee.getEmployeeId());
+			    stmt.setString(2, employee.getFirstName());
+			    stmt.setString(3, employee.getLastName());
+			    stmt.setString(4, employee.getEmail());
+			    stmt.setString(5, employee.getPhone());
+			    stmt.setString(6, employee.getDepartment());
+			    stmt.setDouble(7, employee.getSalary());
+
+			    // Convert javat.util.Date to java.sql.Date
+			    java.sql.Date sqlDate = new java.sql.Date(employee.getJoinDate().getTime());
+			    stmt.setDate(8, sqlDate);
+			    stmt.addBatch();				
+			}
+			int[] result = stmt.executeBatch();
+			return result;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new EmployeeDataAccessException("Error while processing employee data", e);
+			}
+	   }
 	
 	
+	public boolean transferEmployeesToDepartment(List<Integer> employeeIds, String newDepartment) 
+	        throws EmployeeDataAccessException {
+
+	    boolean success = false;
+	    Connection connection = null;
+
+	    try {
+	        connection = DBUtil.getConnection();
+	        PreparedStatement stmt = connection.prepareStatement(SQLConstants.UPDATE_EMPLOYEE_DEPARTMENT_WITH_ID);
+
+	        connection.setAutoCommit(false);
+
+	        for (int employeeId : employeeIds) {
+	            stmt.setString(1, newDepartment);
+	            stmt.setInt(2, employeeId);
+	            stmt.addBatch();
+	        }
+
+	        int[] result = stmt.executeBatch();
+	        boolean hasZero = Arrays.stream(result).anyMatch(n -> n == 0);
+
+	        if (hasZero) {
+	            connection.rollback();
+	        } else {
+	            connection.commit();
+	            success = true;
+	        }
+
+	        stmt.close(); 
+	    } catch (SQLException e) {
+	        throw new EmployeeDataAccessException("Error while updating employee data", e);
+	    } finally {
+	        if (connection != null) {
+	            try {
+	                if (!connection.getAutoCommit()) {
+	                    connection.setAutoCommit(true);
+	                }
+	                connection.close(); 
+	            } catch (SQLException e) {
+	                throw new EmployeeDataAccessException("Error while resetting auto-commit", e);
+	            }
+	        }
+	    }
+	    return success;
+	}
+
+
+
+
 }
+
 	

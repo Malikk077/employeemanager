@@ -7,6 +7,8 @@ public class SQLConstants {
 	public static final String SELECT_EMPLOYEE_BY_ID="select * from employees where emp_id = ? LIMIT 1";
 	public static final String UPDATE_EMPLOYEE_BY_ID="UPDATE employees set first_name=?,last_name=?,email=?,phone=?,department=?,salary=?,join_date=? where emp_id=?";
 	public static final String DELETE_FROM_EMPLOYEES_WITH_ID="DELETE FROM employees where emp_id = ?  ";
+	public static final String UPDATE_EMPLOYEE_DEPARTMENT_WITH_ID="UPDATE employees set department=? where emp_id=?  ";
+	
 	
 	
 	public static final String EMP_ID="emp_id";

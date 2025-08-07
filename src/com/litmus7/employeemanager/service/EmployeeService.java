@@ -65,8 +65,13 @@ public class EmployeeService {
     				logger.warn("Duplicate employee ID found: {}", employee.getEmployeeId());
     				count.put("failure", count.get("failure") + 1);
         			continue;
-    		    }else {
-                	logger.error("Failed to save employee: {}", employee.getEmployeeId());
+    		    } 
+    		    boolean saved = employeeDao.saveEmployee(employee);
+                if (saved) {
+                    logger.info("[writeToDb] Successfully saved employee ID: {}", employee.getEmployeeId());
+                    count.put("success", count.get("success") + 1);
+                } else {
+                    logger.error("[writeToDb] Failed to save employee ID: {}", employee.getEmployeeId());
                     count.put("failure", count.get("failure") + 1);
                 }
     		}catch (NumberFormatException | ParseException | ArrayIndexOutOfBoundsException e) {

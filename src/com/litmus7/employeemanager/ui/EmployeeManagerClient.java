@@ -156,7 +156,7 @@ public class EmployeeManagerClient {
 		    System.out.println("Message: " + batchInsertResponse.getErrorMessage());		
 		}
 		
-		List<Integer> employeeIds = Arrays.asList(104,105,106,109);//updating department of employees using commit and rollback ,full update or nothing
+		List<Integer> employeeIds = Arrays.asList(104,105,106,107);//updating department of employees using commit and rollback ,full update or nothing
 		Response<Integer> transferEmployeesToDepartmentResponse = controller.transferEmployeesToDepartment(employeeIds,"HR");
 		if (transferEmployeesToDepartmentResponse.getStatusCode() == 200 )
 			System.out.println(transferEmployeesToDepartmentResponse.getErrorMessage());
@@ -165,21 +165,12 @@ public class EmployeeManagerClient {
 		    System.out.println("Message: " + transferEmployeesToDepartmentResponse.getErrorMessage());		
 		}
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 	
-		    
-	
-	
-	
-	
+		
+		
+		
+		
+		
 	}
 
 }
